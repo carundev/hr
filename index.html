@@ -160,7 +160,8 @@
     hrBotClose.onclick = () => { hrBotChat.style.display = 'none'; hrBotToggle.style.display = 'inline-block'; };
 
     const responses = [
-      { q: /policy|policies|rules/i, a: "You can find our company policies in the Policies section above. Let me know if you need a specific policy!" },
+      { q: /policy|policies|rules/i, a: "You can find our company policies in the Policies section above or by visiting the Policies page. Let me know if you need a specific policy!" },
+      { q: /onboard|onboarding|checklist|new employee/i, a: "Our Onboarding Checklist will guide you through the steps for new employees. Please visit the Onboarding Checklist section or page for details." },
       { q: /benefit|insurance|health|dental|vision/i, a: "We offer comprehensive health, dental, and vision insurance, plus more. See the Benefits section for details." },
       { q: /contact|email|reach/i, a: "You can contact HR using the Contact section above or email hr@company.com." },
       { q: /leave|vacation|holiday|pto/i, a: "Paid time off and holidays are part of our benefits. Check the Benefits section or ask HR for more info." },
