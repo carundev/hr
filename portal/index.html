@@ -119,5 +119,74 @@
       <p>Or email us at <a href="mailto:hr@company.com">hr@company.com</a></p>
     </section>
   </main>
+  <div id="hr-bot-widget">
+    <button id="hr-bot-toggle">💬 HR Bot</button>
+    <div id="hr-bot-chat" style="display:none;">
+      <div id="hr-bot-header">Neuroflight HR Bot <span id="hr-bot-close">×</span></div>
+      <div id="hr-bot-messages">
+        <div class="bot-msg">Hi! I’m your HR Bot. Ask me about policies, benefits, or how to contact HR.</div>
+      </div>
+      <form id="hr-bot-form">
+        <input id="hr-bot-input" type="text" placeholder="Type your question..." autocomplete="off" required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+  <style>
+    #hr-bot-widget { position: fixed; bottom: 24px; right: 24px; z-index: 1000; }
+    #hr-bot-toggle { background: #005fa3; color: #fff; border: none; border-radius: 50px; padding: 0.8rem 1.5rem; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    #hr-bot-chat { width: 320px; background: #fff; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); position: absolute; bottom: 60px; right: 0; display: flex; flex-direction: column; }
+    #hr-bot-header { background: #005fa3; color: #fff; padding: 0.7rem 1rem; border-radius: 10px 10px 0 0; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    #hr-bot-close { cursor: pointer; font-size: 1.2rem; }
+    #hr-bot-messages { padding: 1rem; height: 180px; overflow-y: auto; font-size: 0.97rem; background: #f4f6f8; }
+    .bot-msg, .user-msg { margin-bottom: 0.7rem; padding: 0.6rem 0.9rem; border-radius: 16px; max-width: 85%; }
+    .bot-msg { background: #e3f0fa; color: #005fa3; align-self: flex-start; }
+    .user-msg { background: #005fa3; color: #fff; align-self: flex-end; }
+    #hr-bot-form { display: flex; border-top: 1px solid #eee; }
+    #hr-bot-input { flex: 1; border: none; padding: 0.7rem; border-radius: 0 0 0 10px; font-size: 1rem; }
+    #hr-bot-form button { background: #005fa3; color: #fff; border: none; padding: 0 1.2rem; border-radius: 0 0 10px 0; cursor: pointer; }
+    @media (max-width: 600px) { #hr-bot-chat { width: 95vw; right: 2vw; } }
+  </style>
+  <script>
+    const hrBotToggle = document.getElementById('hr-bot-toggle');
+    const hrBotChat = document.getElementById('hr-bot-chat');
+    const hrBotClose = document.getElementById('hr-bot-close');
+    const hrBotForm = document.getElementById('hr-bot-form');
+    const hrBotInput = document.getElementById('hr-bot-input');
+    const hrBotMessages = document.getElementById('hr-bot-messages');
+
+    hrBotToggle.onclick = () => { hrBotChat.style.display = 'flex'; hrBotToggle.style.display = 'none'; };
+    hrBotClose.onclick = () => { hrBotChat.style.display = 'none'; hrBotToggle.style.display = 'inline-block'; };
+
+    const responses = [
+      { q: /policy|policies|rules/i, a: "You can find our company policies in the Policies section above. Let me know if you need a specific policy!" },
+      { q: /benefit|insurance|health|dental|vision/i, a: "We offer comprehensive health, dental, and vision insurance, plus more. See the Benefits section for details." },
+      { q: /contact|email|reach/i, a: "You can contact HR using the Contact section above or email hr@company.com." },
+      { q: /leave|vacation|holiday|pto/i, a: "Paid time off and holidays are part of our benefits. Check the Benefits section or ask HR for more info." },
+      { q: /directory|employee|staff/i, a: "The Employee Directory section lists our HR team. Need help finding someone?" },
+      { q: /culture|values|work environment/i, a: "Our culture is collaborative, inclusive, and innovative. See the Culture section for more!" },
+      { q: /.*/, a: "I'm here to help! Please check the sections above or contact HR for more details." }
+    ];
+
+    hrBotForm.onsubmit = function(e) {
+      e.preventDefault();
+      const userMsg = hrBotInput.value.trim();
+      if (!userMsg) return;
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user-msg';
+      userDiv.textContent = userMsg;
+      hrBotMessages.appendChild(userDiv);
+      hrBotMessages.scrollTop = hrBotMessages.scrollHeight;
+      hrBotInput.value = '';
+      setTimeout(() => {
+        const match = responses.find(r => r.q.test(userMsg));
+        const botDiv = document.createElement('div');
+        botDiv.className = 'bot-msg';
+        botDiv.textContent = match ? match.a : responses[responses.length-1].a;
+        hrBotMessages.appendChild(botDiv);
+        hrBotMessages.scrollTop = hrBotMessages.scrollHeight;
+      }, 500);
+    };
+  </script>
 </body>
 </html> 
